@@ -14,10 +14,12 @@ class CreatePicturesTable extends Migration
     public function up()
     {
         Schema::create('pictures', function (Blueprint $table) {
+            
             $table->id();
             $table->string('fname', 100);
-            $table->timestamps();
             $table->unsignedBigInteger('account_id');
+
+            $table->timestamps();
             $table->foreign('account_id')->references('id')->on('accounts');
         });
     }

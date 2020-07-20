@@ -10969,7 +10969,7 @@ body * {
 
 #sum-input {
   display: inline-block;
-  width: 110px;
+  width: 100px;
   height: 38px;
 }
 
@@ -10986,7 +10986,7 @@ body * {
   padding: 10px 0;
 }
 
-#change-input {
+.change-input {
   width: 40%;
   display: inline-block;
 }
@@ -11000,5 +11000,20 @@ input::-webkit-inner-spin-button {
 .selector {
   width: 40%;
   display: inline-block;
+}
+
+.change {
+  margin: 4px 0;
+  width: 175px;
+  text-align: center;
+}
+
+img {
+  width: 20px;
+  background-position: center;
+}
+
+.change-container {
+  text-align: center;
 }
 

@@ -11,6 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/script.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -50,13 +51,13 @@
                             @endif
                         @else
                             <li class="nav-item">
-                                <a id="navbarDropdown" class="nav-link" href="{{route('account.create')}}" role="button" aria-expanded="false" v-pre>
+                                <a class="nav-link" href="{{route('account.create')}}" role="button" aria-expanded="false" v-pre>
                                     Nauja sąskaita <i class="icon-file-text-alt"></i>
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a id="navbarDropdown" class="nav-link" href="{{route('account.index')}}" role="button" aria-expanded="false" v-pre>
+                                <a class="nav-link" href="{{route('account.index')}}" role="button" aria-expanded="false" v-pre>
                                     Saskaitų sąrašas <i class="icon-list"></i>
                                 </a>
                             </li>
@@ -116,6 +117,12 @@
                                 {{session()->get('info_message')}}
                             </div>
                         @endif
+
+                        @if(session()->has('failure_message'))
+                            <div class="alert alert-danger" role="alert">
+                                {{session()->get('failure_message')}}
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>             
@@ -126,5 +133,6 @@
             @yield('content')
         </main>
     </div>
+
 </body>
 </html>

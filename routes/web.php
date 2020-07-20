@@ -26,6 +26,9 @@ Route::get('/add/{account}', 'AccountController@add')->name('account.add');
 Route::post('/add/{account}', 'AccountController@add')->name('account.add');
 
 Route::get('/change/{account}', 'AccountController@change')->name('account.change');
+Route::post('/change/{account}', 'AccountController@change')->name('account.change');
+
+Route::post('/upload/{account}', 'AccountController@upload')->name('account.upload');
 
 Route::get('/subtract/{account}', 'AccountController@subtract')->name('account.subtract');
 

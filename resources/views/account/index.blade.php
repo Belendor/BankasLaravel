@@ -40,6 +40,12 @@
                                         <button class="btn btn-secondary" type="submit">Change <i class="icon-usd"></i></button>
                                         @csrf
                                     </form>
+                                    <div class="upload-box"><form action="{{route('account.upload', [$account])}}" method="post" enctype="multipart/form-data">
+
+                                    Avatar: <input id="file-input" type="file" name="avatar">
+                                    @csrf
+                                    <button type="submit">Add!!!</button>
+                                    </form></div>
                                 </div>
                             </div>
                         @endforeach

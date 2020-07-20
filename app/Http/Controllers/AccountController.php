@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Account;
+use App\Picture;
+use App\Change;
+
 use Illuminate\Http\Request;
 
 class AccountController extends Controller
@@ -46,8 +49,6 @@ class AccountController extends Controller
 
         $account = new Account;
 
-
-    
         $account->name = $request->name;
         $account->surname = $request->surname;
         $account->account = $request->account;
@@ -82,17 +83,50 @@ class AccountController extends Controller
         //
     }
 
+    public function upload(Account $account, Request $request)
+    {
+
+        $picture = new Picture;
+
+        $picture->fname = $request->file('avatar');
+        dd($_FILES['avatar']['name']);
+        $arrays[] =  (array) $request->avatar;
+      // dd( $arrays[0][0]);
+        foreach($arrays[0] as $a){
+            $ar[] =  (array) $a;
+      
+           // echo   ($ar);
+            foreach ($ar as $u){
+                echo  $u[0];
+            }
+        
+        }
+        $picture->account_id = $account->id;
+ 
+        //dd($request->avatar);
+        dd($request->attributes['basename']);
+
+        $picture->save();
+
+        return redirect()->route('account.index');
+    }
+
     public function add(Account $account, Request $request)
     {
         if(isset($_POST['sum'])){
+
             if($request->currency == 'eur'){
 
                 $account->eur += $request->sum;
                 $account->save();
 
             }elseif ($request->currency == 'usd'){
+
                 $account->usd += $request->sum;
+                $account->eur = 0;
+
                 $account->save();
+
             }
 
             return redirect()->route('account.add', [$account])->with('success_message', 'Pinigai prideti sėkminai.');
@@ -101,10 +135,54 @@ class AccountController extends Controller
             return view('account.add', ['account' => $account]);
         }
     }
+
     public function change(Account $account, Request $request)
     {
+        if(isset($request->changefirst)){
 
-        return view('account.change', ['account' => $account]);
+            $EURtoUSD = number_format(Change::getEURtoUSD(), 4);
+            $USDtoEUR = number_format(Change::getUSDtoEUR(), 4);
+            
+            if($request->currency == 'eur' && $request->currency2 == 'usd'){
+
+                if($account->eur < $request->changefirst){
+
+                    return redirect()->route('account.change', [$account])->with('failure_message', 'Nepakankamai pinigų operacijai įvykdyt.');
+
+                }else{
+
+                    $account->usd += $request->changefirst * $EURtoUSD;
+                    $account->eur -= $request->changefirst;
+
+                    $account->save();
+
+                    return redirect()->route('account.change', [$account])->with('success_message', 'Operacija įvykdyda sėkmingai.');
+                }
+
+            }else if ($request->currency == 'usd' && $request->currency2 == 'eur'){
+
+                if($account->usd < $request->changefirst){
+
+                    return redirect()->route('account.change', [$account])->with('failure_message', 'Nepakankamai pinigų operacijai įvykdyt.');
+
+                }else{
+
+                    $account->usd -= $request->changefirst;
+                    $account->eur += $request->changefirst * $USDtoEUR;
+
+                    $account->save();
+
+                    return redirect()->route('account.change', [$account])->with('success_message', 'Operacija įvykdyda sėkmingai.');
+                }
+
+            }else{
+                return redirect()->route('account.change', [$account])->with('failure_message', 'Operacijos įvykdydi negalima.');
+            }
+        }else{
+
+            return view('account.change', ['account' => $account]);
+        }
+
 
     }
 
