@@ -49,6 +49,19 @@
                                 </li>
                             @endif
                         @else
+                            <li class="nav-item">
+                                <a id="navbarDropdown" class="nav-link" href="{{route('account.create')}}" role="button" aria-expanded="false" v-pre>
+                                    Nauja sąskaita <i class="icon-file-text-alt"></i>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a id="navbarDropdown" class="nav-link" href="{{route('account.index')}}" role="button" aria-expanded="false" v-pre>
+                                    Saskaitų sąrašas <i class="icon-list"></i>
+                                </a>
+                            </li>
+
+
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -71,8 +84,45 @@
                 </div>
             </div>
         </nav>
+        
+        <!-- Prideta -->
+        <main class="padding-vertical">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-9">
+                        @if ($errors->any())
+                        <div class="alert">
+                            <ul class="list-group">
+                                @foreach ($errors->all() as $error)
+                                    <li class="list-group-item list-group-item-danger">{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-9">
+                        @if(session()->has('success_message'))
+                            <div class="alert alert-success" role="alert">
+                                {{session()->get('success_message')}}
+                            </div>
+                        @endif
+                        
+                        @if(session()->has('info_message'))
+                            <div class="alert alert-info" role="alert">
+                                {{session()->get('info_message')}}
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>             
+        </main>
+        <!-- Prideta -->
 
-        <main class="py-4">
+        <main>
             @yield('content')
         </main>
     </div>

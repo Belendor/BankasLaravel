@@ -20,7 +20,8 @@ class AccountController extends Controller
      */
     public function index()
     {
-        $accounts = Account::all();
+        $accounts = Account::orderBy('surname')->get();
+
         return view('account.index', ['accounts' => $accounts]);
     }
 
@@ -44,6 +45,8 @@ class AccountController extends Controller
     {
 
         $account = new Account;
+
+
     
         $account->name = $request->name;
         $account->surname = $request->surname;
@@ -79,6 +82,53 @@ class AccountController extends Controller
         //
     }
 
+    public function add(Account $account, Request $request)
+    {
+        if(isset($_POST['sum'])){
+            if($request->currency == 'eur'){
+
+                $account->eur += $request->sum;
+                $account->save();
+
+            }elseif ($request->currency == 'usd'){
+                $account->usd += $request->sum;
+                $account->save();
+            }
+
+            return redirect()->route('account.add', [$account])->with('success_message', 'Pinigai prideti sėkminai.');
+
+        }else{
+            return view('account.add', ['account' => $account]);
+        }
+    }
+    public function change(Account $account, Request $request)
+    {
+
+        return view('account.change', ['account' => $account]);
+
+    }
+
+    public function subtract(Account $account, Request $request)
+    {
+        if(isset($_POST['sum'])){
+
+            if($request->currency == 'eur'){
+
+                $account->eur -= $request->sum;
+                $account->save();
+
+            }elseif ($request->currency == 'usd'){
+                $account->usd -= $request->sum;
+                $account->save();
+            }
+
+            return redirect()->route('account.subtract', [$account])->with('success_message', 'Pinigai atimti sėkminai.');
+
+        }else{
+            return view('account.subtract', ['account' => $account]);
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -99,6 +149,8 @@ class AccountController extends Controller
      */
     public function destroy(Account $account)
     {
-        //
+        $account->delete();
+
+        return redirect()->route('account.index')->with('success_message', 'Sekmingai ištrintas.');
     }
 }

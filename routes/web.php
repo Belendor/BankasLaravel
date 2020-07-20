@@ -13,12 +13,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/', 'AccountController@index')->name('account.index');
 Route::get('/create', 'AccountController@create')->name('account.create');
 Route::post('/store', 'AccountController@store')->name('account.store');
 
-Auth::routes();
+Route::post('/delete/{account}', 'AccountController@destroy')->name('account.destroy');
 
+Route::get('/add/{account}', 'AccountController@add')->name('account.add');
+
+Route::post('/add/{account}', 'AccountController@add')->name('account.add');
+
+Route::get('/change/{account}', 'AccountController@change')->name('account.change');
+
+Route::get('/subtract/{account}', 'AccountController@subtract')->name('account.subtract');
+
+Route::post('/subtract/{account}', 'AccountController@subtract')->name('account.subtract');
+
+Auth::routes();

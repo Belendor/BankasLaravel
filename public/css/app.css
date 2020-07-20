@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Nunito);@charset "UTF-8";
+@import url(https://fonts.googleapis.com/css?family=Nunito);@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);@charset "UTF-8";
 
 /*!
  * Bootstrap v4.5.0 (https://getbootstrap.com/)
@@ -10934,21 +10934,71 @@ body * {
   padding: 0;
   vertical-align: top;
   box-sizing: border-box;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-family: "SEB Sans Serif", "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
 .table-row {
-  display: inline-block;
+  display: flex;
   width: 100%;
+  padding: 3px 0;
+  border-bottom: solid 1px rgba(180, 177, 177, 0.753);
 }
 
 .row-cell {
-  display: inline-block;
+  display: flex;
   width: 20%;
   float: left;
+  align-items: stretch;
+  justify-content: center;
+  align-items: center;
 }
 
 .table-row-main {
   border-bottom: solid 1px #747272;
+}
+
+.btn {
+  width: 100px;
+  text-align: unset;
+  display: inline-block;
+}
+
+.row-cell.action-box {
+  display: inline-block;
+}
+
+#sum-input {
+  display: inline-block;
+  width: 110px;
+  height: 38px;
+}
+
+#select1 {
+  display: inline-block;
+}
+
+.py-4 {
+  padding: 0;
+  margin: unset;
+}
+
+.padding-vertical {
+  padding: 10px 0;
+}
+
+#change-input {
+  width: 40%;
+  display: inline-block;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.selector {
+  width: 40%;
+  display: inline-block;
 }
 
