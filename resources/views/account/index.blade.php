@@ -10,17 +10,17 @@
                 <div class="card-body">
                     <div class="table">
                         <div class="table-row table-row-main">
-                            <div class="row-cell name-box">Vardas</div>
+                        <div class="row-cell name-box">Vardas</div>
                             <div class="row-cell surname-box">Pavarde</div>
                             <div class="row-cell account-box">Saskaita</div>
                             <div class="row-cell ak-box">Asmens kodas</div>
                             <div class="row-cell action-box">Veiksmai</div>
                         </div>
-                        @foreach ($accounts as $account)
 
+                        @foreach ($accounts as $account)
                             <div class="table-row">
-                                <div class="row-cell name-box">{{$account->name}}</div>
-                                <div class="row-cell surname-box">{{$account->surname}}</div>
+                                <div class="row-cell name-box"><img src="{{App\PictureGenerator::generate($account)}}" alt="Picture"> {{$account->name}} </div>
+                                <div class="row-cell surname-box"> {{$account->surname}}</div>
                                 <div class="row-cell account-box">{{$account->account}}</div>
                                 <div class="row-cell ak-box">{{$account->ak}}</div>
                                 <div class="row-cell action-box">
@@ -42,9 +42,9 @@
                                     </form>
                                     <div class="upload-box"><form action="{{route('account.upload', [$account])}}" method="post" enctype="multipart/form-data">
 
-                                    Avatar: <input id="file-input" type="file" name="avatar">
+                                    <input id="file-input" type="file" name="avatar">
                                     @csrf
-                                    <button type="submit">Add!!!</button>
+                                    <button class="btn btn-primary"  type="submit">Add</button>
                                     </form></div>
                                 </div>
                             </div>

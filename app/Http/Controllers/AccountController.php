@@ -45,20 +45,28 @@ class AccountController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
+
     {
+        $hasAK = Account::where('ak', $request->ak)->get()->count();
 
-        $account = new Account;
+        if($hasAK == 0){
+            $account = new Account;
+    
+            $account->name = $request->name;
+            $account->surname = $request->surname;
+            $account->account = $request->account;
+            $account->ak = $request->ak;
+            $account->eur = 0;
+            $account->usd = 0;
+    
+            $account->save();
+    
+            return redirect()->route('account.create')->with('success_message', 'Sekmingai įrašytas.');
 
-        $account->name = $request->name;
-        $account->surname = $request->surname;
-        $account->account = $request->account;
-        $account->ak = $request->ak;
-        $account->eur = 0;
-        $account->usd = 0;
+        }else{
+            return redirect()->route('account.create')->with('failure_message', 'Toks asmens kodas jau egzistuoja.');
+        }
 
-        $account->save();
-
-        return redirect()->route('account.create')->with('success_message', 'Sekmingai įrašytas.');
     }
 
     /**
@@ -86,29 +94,23 @@ class AccountController extends Controller
     public function upload(Account $account, Request $request)
     {
 
-        $picture = new Picture;
-
-        $picture->fname = $request->file('avatar');
-        dd($_FILES['avatar']['name']);
-        $arrays[] =  (array) $request->avatar;
-      // dd( $arrays[0][0]);
-        foreach($arrays[0] as $a){
-            $ar[] =  (array) $a;
-      
-           // echo   ($ar);
-            foreach ($ar as $u){
-                echo  $u[0];
-            }
+        $hasAK = Picture::where('account_id', $account->id)->get()->count();
         
+        if($hasAK == 0){
+            $picture = new Picture;
+    
+            $picture->fname = $_FILES['avatar']['name'];
+    
+            $picture->account_id = $account->id;
+    
+            $picture->save();
+    
+            $rootDir = str_replace('app\Http\Controllers', '', __DIR__);
+    
+            move_uploaded_file($_FILES['avatar']['tmp_name'], $rootDir.'public\\'.$_FILES['avatar']['name']);
+    
+            return redirect()->route('account.index');
         }
-        $picture->account_id = $account->id;
- 
-        //dd($request->avatar);
-        dd($request->attributes['basename']);
-
-        $picture->save();
-
-        return redirect()->route('account.index');
     }
 
     public function add(Account $account, Request $request)
@@ -191,16 +193,25 @@ class AccountController extends Controller
         if(isset($_POST['sum'])){
 
             if($request->currency == 'eur'){
-
-                $account->eur -= $request->sum;
-                $account->save();
+                if($account->eur < $request->sum){
+                    return redirect()->route('account.subtract', [$account])->with('failure_message', 'Nepakankamai eurų sąskaitoje.');
+                }else{
+                    $account->eur -= $request->sum;
+                    $account->save();
+                    return redirect()->route('account.subtract', [$account])->with('success_message', 'Pinigai atimti sėkminai.');
+                }
 
             }elseif ($request->currency == 'usd'){
+                if($account->usd < $request->sum){
+                    return redirect()->route('account.subtract', [$account])->with('failure_message', 'Nepakankamai dolerių sąskaitoje.');
+                }else{
                 $account->usd -= $request->sum;
                 $account->save();
+                    return redirect()->route('account.subtract', [$account])->with('success_message', 'Pinigai atimti sėkminai.');
+                }
             }
 
-            return redirect()->route('account.subtract', [$account])->with('success_message', 'Pinigai atimti sėkminai.');
+       
 
         }else{
             return view('account.subtract', ['account' => $account]);
@@ -227,6 +238,12 @@ class AccountController extends Controller
      */
     public function destroy(Account $account)
     {
+        if($account->usd > 0 || $account->eur > 0){
+
+            return redirect()->route('account.index')->with('failure_message', 'Trinti negalima, nes turi pinigu.');
+            
+        }
+        Picture::where('account_id', $account->id)->delete();
         $account->delete();
 
         return redirect()->route('account.index')->with('success_message', 'Sekmingai ištrintas.');

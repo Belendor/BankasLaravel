@@ -17,7 +17,7 @@ firstSelect.addEventListener("change", ()=>{
 
     if(firstSelected == 'eur' && secondSelected == 'usd'){
 
-        secondInput.value = firstInput.value * USDtoEURRate
+        secondInput.value = firstInput.value * EURtoUSDRate
 
     }else if(firstSelected == 'usd' && secondSelected == 'eur'){
 
@@ -34,7 +34,7 @@ secondSelect.addEventListener("change", ()=>{
 
     if(firstSelected == 'eur' && secondSelected == 'usd'){
 
-        secondInput.value = firstInput.value * USDtoEURRate
+        secondInput.value = firstInput.value * EURtoUSDRate
 
     }else if(firstSelected == 'usd' && secondSelected == 'eur'){
 
@@ -45,7 +45,6 @@ secondSelect.addEventListener("change", ()=>{
     }
 })
 
-
 firstInput.addEventListener("input", ()=>{
     
     firstSelected = firstSelect.value
@@ -53,7 +52,7 @@ firstInput.addEventListener("input", ()=>{
 
     if(firstSelected == 'eur' && secondSelected == 'usd'){
 
-        secondInput.value = firstInput.value * USDtoEURRate
+        secondInput.value = firstInput.value * EURtoUSDRate
 
     }else if(firstSelected == 'usd' && secondSelected == 'eur'){
 
