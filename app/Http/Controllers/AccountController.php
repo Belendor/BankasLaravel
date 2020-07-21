@@ -94,9 +94,9 @@ class AccountController extends Controller
     public function upload(Account $account, Request $request)
     {
 
-        $hasAK = Picture::where('account_id', $account->id)->get()->count();
+        $pictureFound = Picture::where('account_id', $account->id)->get()->count();
         
-        if($hasAK == 0){
+        if( $pictureFound == 0){
             $picture = new Picture;
     
             $picture->fname = $_FILES['avatar']['name'];
@@ -108,6 +108,23 @@ class AccountController extends Controller
             $rootDir = str_replace('app\Http\Controllers', '', __DIR__);
     
             move_uploaded_file($_FILES['avatar']['tmp_name'], $rootDir.'public\\'.$_FILES['avatar']['name']);
+    
+            return redirect()->route('account.index');
+        }else{
+            
+            $pictureFound = Picture::where('account_id', $account->id)->get();
+
+            foreach($pictureFound as $picture){
+
+                $picture->account_id = $account->id;
+                $picture->fname = $_FILES['avatar']['name'];
+                $picture->save();
+    
+                $rootDir = str_replace('app\Http\Controllers', '', __DIR__);
+        
+                move_uploaded_file($_FILES['avatar']['tmp_name'], $rootDir.'public\\'.$_FILES['avatar']['name']);
+
+            }
     
             return redirect()->route('account.index');
         }
